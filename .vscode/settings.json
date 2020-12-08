@@ -1,0 +1,13 @@
+{
+    "material-icon-theme.folders.theme": "specific", // Tipo dos iconens dos arquivos
+    "material-icon-theme.folders.color": "#ef5350", // Cor dos icone das pastas
+    "window.zoomLevel": -2, // Zomm screem vs-code
+    "workbench.editor.showTabs": true,
+    "workbench.editor.enablePreview": false,
+    "editor.formatOnSave": true, // Formata o código sempre que salvamos
+    "editor.minimap.enabled": false, // Desabilita o Mini Map
+    "terminal.integrated.cursorStyle": "underline", // Deixa o cursor do terminal como underline
+    "git.enableSmartCommit": true, // Habilita Smart Commit do GIT
+    "git.autofetch": true, // Atualização automatica do codigo
+    "workbench.iconTheme": "material-icon-theme" // Habilita Auto Fetch do GIT
+}
