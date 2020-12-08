@@ -51,14 +51,14 @@ pm2 startup
 
 sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u ${USER} --hp /home/${USER}
 
-# O servidor iniciará na porta:8000
+# O servidor iniciará na porta:9000
 
 # Pronto, escaneie o código QR-Code do Whatsapp e aproveite!
 ```
 #### Iniciar sessão whatsapp (POST method)
 ```node
 router.post("/Start", (req, res, next) => {
-  const response = await fetch('http://localhost:8000/sistem/Start', {
+  const response = await fetch('http://localhost:9000/sistem/Start', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -78,7 +78,7 @@ router.post("/Start", (req, res, next) => {
 ####  Exibir QR-Code no navegador (POST method)
 ```node
 router.post("/QRCode", (req, res, next) => {
-  const response = await fetch('http://localhost:8000/sistem/QRCode', {
+  const response = await fetch('http://localhost:9000/sistem/QRCode', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -99,7 +99,7 @@ router.post("/QRCode", (req, res, next) => {
 ####  Retorna json com (base64) do QR-Code (POST method)
 ```node
 router.post("/QRCode", (req, res, next) => {
-  const response = await fetch('http://localhost:8000/sistem/QRCode', {
+  const response = await fetch('http://localhost:9000/sistem/QRCode', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -120,7 +120,7 @@ router.post("/QRCode", (req, res, next) => {
 #### Fecha sessão whatsapp (POST method)
 ```node
 router.post("/Close", (req, res, next) => {
-  const response = await fetch('http://localhost:8000/sistem/Close', {
+  const response = await fetch('http://localhost:9000/sistem/Close', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -152,7 +152,7 @@ $ cd mywhats-api
 $ docker build -t alanmartines/nodejs-mywhats:1.0 .
 
 # Criar um contêiner
-$ docker container run --name mywhats-api -p 8000:8000 -d alanmartines/nodejs-mywhats-api:1.0
+$ docker container run --name mywhats-api -p 9000:9000 -d alanmartines/nodejs-mywhats-api:1.0
 ```
 ## Para instalar o certbot e criar o certificado SSL para domínios https
 ```bash

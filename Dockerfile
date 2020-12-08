@@ -71,7 +71,7 @@ RUN npm install
 # Copie o restante do código-fonte do seu aplicativo do host para o sistema de arquivos de imagem.
 COPY . .
 
-EXPOSE 8000
+EXPOSE 9000
 # EXPOSE 80 443
 
 # Execute o comando especificado dentro do contêiner.
@@ -79,10 +79,10 @@ CMD [ "npm", "start" ]
 
 ### LEIA-ME ###
 ## Processando o arquivo Dockerfile
-# docker build -t alanmartines/nodejs-mywhats:1.0 .
+# docker build -t alanmartines/nodejs-mywhats-api:1.0 .
 
 ## Criar um contêiner
-# docker container run --name mywhats -p 8000:8000 -d alanmartines/nodejs-mywhats:1.0
+# docker container run --name mywhats-api -p 9000:9000 -d alanmartines/nodejs-mywhats-api:1.0
 
 ## Acessar bash do container
 # docker exec -it <container id> /bin/sh

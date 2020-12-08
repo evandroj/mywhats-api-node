@@ -12,7 +12,7 @@ const cors = require('cors');
 const sistem = require("./routes/sistem.routes");
 const ssl = process.env.HTTPS || false;
 const hostname = process.env.HOST || '0.0.0.0';
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 9000;
 const ssl_key = process.env.KEY || './sslcert/server.key';
 const ssl_cert = process.env.CERT || './sslcert/server.crt';
 const Sessions = require("./sessions.js");
@@ -45,6 +45,7 @@ if (ssl === true) { //with ssl
     });
 } // End the server web
 //
+// Nome de sessão de teste
 Sessions.start('c002928a-ff53-46c1-99f1-b2622d7fe84a');
 //
 /*
