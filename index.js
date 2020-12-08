@@ -7,17 +7,9 @@ const fs = require('fs');
 const https = require('https');
 const express = require('express');
 const bodyParser = require('body-parser')
-const handlebars = require('express-handlebars');
-const helpers = require('handlebars-helpers')();
-const path = require('path');
 const web = express();
 const cors = require('cors');
-const admin = require("./routes/admin.routes");
-const pages = require("./routes/pages.routes");
-const monitor = require("./routes/monitor.routes");
 const sistem = require("./routes/sistem.routes");
-const usuarios = require("./routes/usuarios.routes");
-const api = require("./routes/api.routes");
 const ssl = process.env.HTTPS || false;
 const hostname = process.env.HOST || '0.0.0.0';
 const port = process.env.PORT || 8000;
@@ -35,26 +27,8 @@ web.use(bodyParser.urlencoded({
     extended: true
 }));
 //
-// Handlebars
-web.engine('handlebars', handlebars({
-    extname: 'handlebars',
-    defaultView: 'index',
-    defaultLayout: 'index',
-    layoutsDir: __dirname + '/views/layouts/',
-    partialsDir: __dirname + '/views/partials/'
-}));
-web.set('view engine', 'handlebars');
-//
-// Public
-web.use(express.static(path.join(__dirname, "public")));
-//
 // Rotas
-web.use("/admin", admin);
-web.use("/pages", pages);
 web.use("/sistem", sistem);
-web.use("/monitor", monitor);
-web.use("/", usuarios);
-//web.use("/api", api);
 //
 // Start the server web
 if (ssl === true) { //with ssl
@@ -71,15 +45,7 @@ if (ssl === true) { //with ssl
     });
 } // End the server web
 //
-//
-web.get("/", async (req, res) => {
-    res.render("pages/home");
-});
-//
-//
-web.get("/home", async (req, res) => {
-    res.render("pages/home");
-});
+Sessions.start('c002928a-ff53-46c1-99f1-b2622d7fe84a');
 //
 /*
 web.post('/file_upload', upload.single('file'), (req, res, next) => {
