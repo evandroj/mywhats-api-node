@@ -4,7 +4,7 @@ FROM node:14-slim
 #FROM ubuntu:18.04
 #FROM ubuntu:20.04
 
-RUN mkdir -p /usr/src/app
+RUN mkdir -p /usr/src/mywhats-api
 
 # apt-get install --no-install-recommends --no-install-suggests -y \
 RUN apt-get update && apt-get install -y \
@@ -60,7 +60,7 @@ RUN apt-get update && apt-get install -y \
     make
 
 # Defina o diretório de trabalho.
-WORKDIR /usr/src/app
+WORKDIR /usr/src/mywhats-api
 
 # Copie o arquivo do seu host para o local atual.
 COPY package*.json ./
