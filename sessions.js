@@ -220,6 +220,136 @@ module.exports = class Sessions {
         return client;
     } //initSession
     //
+    //
+    // ------------------------------------------------------------------------------------------------//
+    //
+    //
+    static async setup(sessionName) {
+        console.log("- Sinstema iniciado!");
+        var session = Sessions.getSession(sessionName);
+        await session.client.then(client => {
+            // Listen to messages
+            client.onMessage((message) => {
+            if (message.body === 'Oi' && message.isGroupMsg === false) {
+              client
+                .sendText(message.from, '🕷 Welcome Venom Bot 🕸 \n \n Olá! Tudo bem com você?')
+                .then((result) => {
+                  console.log('- Result: ', result); //retorna um objeto de successo
+                })
+                .catch((erro) => {
+                  console.error('- Error: ', erro); //return um objeto de erro
+                });
+            }
+            });
+            //
+            // State change
+            client.onStateChange((state) => {
+                console.log('- State changed: ', state);
+                session.state = state;
+                // force whatsapp take over
+                if ('CONFLICT'.includes(state)) client.useHere();
+                // detect disconnect on whatsapp
+                if ('UNPAIRED'.includes(state)) console.log('- Logout');
+            });
+            //
+            // function to detect incoming call
+            client.onIncomingCall(async (call) => {
+                console.log(call);
+                client.sendText(call.peerJid, "Desculpe, ainda não consigo atender chamadas");
+            });
+            // Listen to ack's
+            client.onAck((ack) => {
+                if(ack == '-7'){
+                    var str_ack = "MD_DOWNGRADE";
+                }else if(ack == '-6'){
+                    var str_ack = "INACTIVE";
+                }else if(ack == '-5'){
+                    var str_ack = "CONTENT_UNUPLOADABLE";
+                }else if(ack == '-4'){
+                    var str_ack = "CONTENT_TOO_BIG";
+                }else if(ack == '-3'){
+                    var str_ack = "CONTENT_GONE";
+                }else if(ack == '-2'){
+                    var str_ack = "EXPIRED";
+                }else if(ack == '-1'){
+                    var str_ack = "FAILED";
+                }else if(ack == '0'){
+                    var str_ack = "CLOCK";
+                }else if(ack == '1'){
+                    var str_ack = "SENT";
+                }else if(ack == '2'){
+                    var str_ack = "RECEIVED";
+                }else if(ack == '3'){
+                    var str_ack = "READ";
+                }else if(ack == '4'){
+                    var str_ack = "PLAYED";
+                }else{
+                    var str_ack = "DESCONHECIDO";
+                }
+                console.log('- Listen to acks:', str_ack);
+              });
+            // Listen when client has been added to a group
+            client.onAddedToGroup((chatEvent) => {
+                console.log('- Listen when client has been added to a group:', chatEvent);
+            });
+        });
+    } //setup
+    //
+    // ------------------------------------------------------------------------------------------------//
+    //
+    //
+    static async closeSession(sessionName) {
+        console.log("- Fechando sessão");
+        var session = Sessions.getSession(sessionName);
+        if (session) { //só adiciona se não existir
+            if (session.state != "CLOSED") {
+                if (session.client)
+                    await session.client.then(async client => {
+                        try {
+                            await client.close();
+                        } catch (error) {
+                            console.log("- Erro ao fechar sistema:", error.message);
+                        }
+                        session.state = "CLOSED";
+                        session.client = false;
+                        console.log("- Sistema fechado");
+                    });
+                return {
+                    result: "success",
+                    state: session.state,
+                    message: "Sistema fechado"
+                };
+            } else { //close
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: "error",
+                state: "NOTFOUND",
+                message: "Sistema Off-line"
+            };
+        }
+    } //closeSession
+    //
+    //
     // ------------------------------------------------------------------------------------------------//
     //
     // Device Functions
@@ -287,107 +417,6 @@ module.exports = class Sessions {
         console.log("- isConnected:", resultgetWAVersion);
     } //getWAVersion
     //
-    //
-    // ------------------------------------------------------------------------------------------------//
-    //
-    //
-    static async setup(sessionName) {
-        console.log("- Sinstema iniciado!");
-        var session = Sessions.getSession(sessionName);
-        await session.client.then(client => {
-            // Listen to messages
-            client.onMessage((message) => {
-            if (message.body === 'Oi' && message.isGroupMsg === false) {
-              client
-                .sendText(message.from, '🕷 Welcome Venom Bot 🕸 \n \n Olá! Tudo bem com você?')
-                .then((result) => {
-                  console.log('- Result: ', result); //retorna um objeto de successo
-                })
-                .catch((erro) => {
-                  console.error('- Error: ', erro); //return um objeto de erro
-                });
-            }
-            });
-            //
-            // State change
-            client.onStateChange((state) => {
-                console.log('- State changed: ', state);
-                session.state = state;
-                // force whatsapp take over
-                if ('CONFLICT'.includes(state)) client.useHere();
-                // detect disconnect on whatsapp
-                if ('UNPAIRED'.includes(state)) console.log('- Logout');
-            });
-            //
-            // function to detect incoming call
-            client.onIncomingCall(async (call) => {
-                console.log(call);
-                client.sendText(call.peerJid, "Desculpe, ainda não consigo atender chamadas");
-            });
-            // Listen to ack's
-            client.onAck((ack) => {
-                console.log('- Listen to acks:', ack);
-              });
-            // Listen when client has been added to a group
-            client.onAddedToGroup((chatEvent) => {
-                console.log('- Listen when client has been added to a group:', chatEvent);
-            });
-        });
-    } //setup
-    //
-    // ------------------------------------------------------------------------------------------------//
-    //
-    //
-    static async closeSession(sessionName) {
-        console.log("- Fechando sessão");
-        var session = Sessions.getSession(sessionName);
-        if (session) { //só adiciona se não existir
-            if (session.state != "CLOSED") {
-                if (session.client)
-                    await session.client.then(async client => {
-                        try {
-                            await client.close();
-                        } catch (error) {
-                            console.log("- Erro ao fechar sistema:", error.message);
-                        }
-                        session.state = "CLOSED";
-                        session.client = false;
-                        console.log("- Sistema fechado");
-                    });
-                return {
-                    result: "success",
-                    state: session.state,
-                    message: "Sistema fechado"
-                };
-            } else { //close
-                if (session.state == "STARTING") {
-                    return {
-                        result: "info",
-                        state: session.state,
-                        message: "Sistema iniciando"
-                    };
-                } else if (session.state == "QRCODE") {
-                    return {
-                        result: "warning",
-                        state: session.state,
-                        message: "Sistema aguardando leitura do QR-Code"
-                    };
-                } else if (session.state == "CLOSED") {
-                    return {
-                        result: "info",
-                        state: session.state,
-                        message: "Sistema encerrado"
-                    };
-                }
-            }
-        } else {
-            return {
-                result: "error",
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
-            };
-        }
-    } //closeSession
     //
     // ------------------------------------------------------------------------------------------------//
     //
