@@ -29,7 +29,7 @@ $ sudo apt install -y git nodejs yarn gcc g++ make
 $ sudo apt autoremove -y
 
 # Clone este repositório
-$ git clone https://github.com/AlanMartines/mywhats-api.git
+$ git clone https://github.com/AlanMartines/mywhats-api-node.git
 
 # Acesse a pasta do projeto no terminal/cmd
 $ cd mywhats-api
@@ -143,16 +143,16 @@ router.post("/Close", (req, res, next) => {
 $ cd ~
 
 # Clone este repositório
-$ git clone https://github.com/AlanMartines/mywhats-api.git
+$ git clone https://github.com/AlanMartines/mywhats-api-node.git
 
 # Acesse a pasta do projeto no terminal/cmd
 $ cd mywhats-api
 
 # Processando o arquivo Dockerfile
-$ docker build -t alanmartines/nodejs-mywhats:1.0 .
+$ docker build -t alanmartines/nodejs-mywhats-api-node:1.0 .
 
 # Criar um contêiner
-$ docker container run --name mywhats-api -p 9000:9000 -d alanmartines/nodejs-mywhats-api:1.0
+$ docker container run --name mywhats-api-node -p 9000:9000 -d alanmartines/nodejs-mywhats-api-node:1.0
 ```
 ## Para instalar o certbot e criar o certificado SSL para domínios https
 ```bash
