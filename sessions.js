@@ -159,7 +159,7 @@ module.exports = class Sessions {
             */
         }, (statusSession, session_venom) => {
             console.log('- Status da sessão:', statusSession);
-            //return isLogged || notLogged || browserClose || qrReadSuccess || qrReadFail
+            //return isLogged || notLogged || browserClose || qrReadSuccess || qrReadFail || autocloseCalled || desconnectedMobile || deleteToken
             //Create session wss return "serverClose" case server for close
             console.log('- Session name: ', session_venom);
             
