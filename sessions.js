@@ -230,14 +230,15 @@ module.exports = class Sessions {
         await session.client.then(client => {
             // Listen to messages
             client.onMessage((message) => {
+                console.log("onMessage\n",message)
             if (message.body === 'Oi' && message.isGroupMsg === false) {
               client
                 .sendText(message.from, '🕷 Welcome Venom Bot 🕸 \n \n Olá! Tudo bem com você?')
                 .then((result) => {
-                  console.log('- Result: ', result); //retorna um objeto de successo
+                  //console.log('- Result: ', result); //retorna um objeto de successo
                 })
                 .catch((erro) => {
-                  console.error('- Error: ', erro); //return um objeto de erro
+                  //console.error('- Error: ', erro); //return um objeto de erro
                 });
             }
             });
