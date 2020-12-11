@@ -247,7 +247,7 @@ router.post("/getAllContacts", async (req, res, next) => {
 //
 router.post("/loadAndGetAllMessagesInChat", async (req, res, next) => {
     var result = await Sessions.loadAndGetAllMessagesInChat(
-        req.body.SessionName, 
+        req.body.SessionName,
         soNumeros(req.body.phonefull)
     );
     res.json(result);
@@ -258,7 +258,7 @@ router.post("/loadAndGetAllMessagesInChat", async (req, res, next) => {
 //
 router.post("/getStatus", async (req, res, next) => {
     var result = await Sessions.getStatus(
-        req.body.SessionName, 
+        req.body.SessionName,
         soNumeros(req.body.phonefull)
     );
     res.json(result);
@@ -269,9 +269,9 @@ router.post("/getStatus", async (req, res, next) => {
 //
 router.post("/getNumberProfile", async (req, res, next) => {
     var result = await Sessions.getNumberProfile(
-        req.body.SessionName, 
+        req.body.SessionName,
         soNumeros(req.body.phonefull)
-     );
+    );
     res.json(result);
 }); //getNumberProfile
 //
@@ -304,7 +304,7 @@ router.post("/getAllGroups", async (req, res, next) => {
 //
 router.post("/getProfilePicFromServer", async (req, res, next) => {
     var result = await Sessions.getProfilePicFromServer(
-        req.body.SessionName, 
+        req.body.SessionName,
         soNumeros(req.body.phonefull)
     );
     res.json(result);
@@ -348,7 +348,7 @@ router.post("/leaveGroup", async (req, res, next) => {
     var result = await Sessions.leaveGroup(
         req.body.SessionName,
         req.body.groupId
-        );
+    );
     res.json(result);
 }); //close
 //
@@ -356,7 +356,7 @@ router.post("/getGroupMembers", async (req, res, next) => {
     var result = await Sessions.getGroupMembers(
         req.body.SessionName,
         req.body.groupId
-        );
+    );
     res.json(result);
 }); //close
 //

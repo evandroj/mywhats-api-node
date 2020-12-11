@@ -162,7 +162,7 @@ module.exports = class Sessions {
             //return isLogged || notLogged || browserClose || qrReadSuccess || qrReadFail || autocloseCalled || desconnectedMobile || deleteToken
             //Create session wss return "serverClose" case server for close
             console.log('- Session name: ', session_venom);
-            
+
             if (statusSession == 'isLogged' || statusSession == 'inChat') {
                 session.state = "CONNECTED";
             } else if (statusSession == 'qrReadSuccess') {
@@ -170,7 +170,7 @@ module.exports = class Sessions {
             } else if (statusSession == 'qrReadFail' || statusSession == 'notLogged') {
                 session.state = "STARTING";
             }
-                session.status = statusSession;
+            session.status = statusSession;
         }, {
             folderNameToken: "tokens", //folder name when saving tokens
             mkdirFolderToken: '', //folder directory tokens, just inside the venom folder, example:  { mkdirFolderToken: '/node_modules', } //will save the tokens folder in the node_modules directory
@@ -230,17 +230,17 @@ module.exports = class Sessions {
         await session.client.then(client => {
             // Listen to messages
             client.onMessage((message) => {
-                console.log("onMessage\n",message)
-            if (message.body === 'Oi' && message.isGroupMsg === false) {
-              client
-                .sendText(message.from, '🕷 Welcome Venom Bot 🕸 \n \n Olá! Tudo bem com você?')
-                .then((result) => {
-                  //console.log('- Result: ', result); //retorna um objeto de successo
-                })
-                .catch((erro) => {
-                  //console.error('- Error: ', erro); //return um objeto de erro
-                });
-            }
+                console.log("onMessage\n", message)
+                if (message.body === 'Oi' && message.isGroupMsg === false) {
+                    client
+                        .sendText(message.from, '🕷 Welcome Venom Bot 🕸 \n \n Olá! Tudo bem com você?')
+                        .then((result) => {
+                            //console.log('- Result: ', result); //retorna um objeto de successo
+                        })
+                        .catch((erro) => {
+                            //console.error('- Error: ', erro); //return um objeto de erro
+                        });
+                }
             });
             //
             // State change
@@ -260,35 +260,35 @@ module.exports = class Sessions {
             });
             // Listen to ack's
             client.onAck((ack) => {
-                if(ack == '-7'){
+                if (ack == '-7') {
                     var str_ack = "MD_DOWNGRADE";
-                }else if(ack == '-6'){
+                } else if (ack == '-6') {
                     var str_ack = "INACTIVE";
-                }else if(ack == '-5'){
+                } else if (ack == '-5') {
                     var str_ack = "CONTENT_UNUPLOADABLE";
-                }else if(ack == '-4'){
+                } else if (ack == '-4') {
                     var str_ack = "CONTENT_TOO_BIG";
-                }else if(ack == '-3'){
+                } else if (ack == '-3') {
                     var str_ack = "CONTENT_GONE";
-                }else if(ack == '-2'){
+                } else if (ack == '-2') {
                     var str_ack = "EXPIRED";
-                }else if(ack == '-1'){
+                } else if (ack == '-1') {
                     var str_ack = "FAILED";
-                }else if(ack == '0'){
+                } else if (ack == '0') {
                     var str_ack = "CLOCK";
-                }else if(ack == '1'){
+                } else if (ack == '1') {
                     var str_ack = "SENT";
-                }else if(ack == '2'){
+                } else if (ack == '2') {
                     var str_ack = "RECEIVED";
-                }else if(ack == '3'){
+                } else if (ack == '3') {
                     var str_ack = "READ";
-                }else if(ack == '4'){
+                } else if (ack == '4') {
                     var str_ack = "PLAYED";
-                }else{
+                } else {
                     var str_ack = "DESCONHECIDO";
                 }
                 console.log('- Listen to acks:', str_ack);
-              });
+            });
             // Listen when client has been added to a group
             client.onAddedToGroup((chatEvent) => {
                 console.log('- Listen when client has been added to a group:', chatEvent);
@@ -304,7 +304,7 @@ module.exports = class Sessions {
         var session = Sessions.getSession(sessionName);
         if (session) { //só adiciona se não existir
             if (session.state != "CLOSED") {
-                if (session.client)
+                if (session.client) {
                     await session.client.then(async client => {
                         try {
                             await client.close();
@@ -312,15 +312,17 @@ module.exports = class Sessions {
                             console.log("- Erro ao fechar sistema:", error.message);
                         }
                         session.state = "CLOSED";
+                        session.status = "notLogged";
                         session.client = false;
                         console.log("- Sistema fechado");
                     });
-                return {
-                    result: "success",
-                    state: session.state,
-                    status: session.status,
-                    message: "Sistema fechado"
-                };
+                    return {
+                        result: "success",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema fechado"
+                    };
+                }
             } else { //close
                 if (session.state == "STARTING") {
                     return {
@@ -361,65 +363,325 @@ module.exports = class Sessions {
     // Device Functions
     // Delete the Service Worker
     static async killServiceWorker(sessionName) {
+        console.log("- killServiceWorker");
         var session = Sessions.getSession(sessionName);
-        var resultkillServiceWorker = await session.client.then(async client => {
-            return await client.killServiceWorker();
-        });
-        return resultkillServiceWorker;
+        if (session) { //só adiciona se não existir
+            if (session.state != "CLOSED") {
+                if (session.client) {
+                    var resultkillServiceWorker = await session.client.then(async client => {
+                        return await client.killServiceWorker();
+                    });
+                    return resultkillServiceWorker;
+                }
+            } else { //close
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
     } //killServiceWorker
     //
     // Load the service again
     static async restartService(sessionName) {
+        console.log("- restartService");
         var session = Sessions.getSession(sessionName);
-        var resultrestartService = await session.client.then(async client => {
-            return await client.restartService();
-        });
-        return resultrestartService;
+        if (session) { //só adiciona se não existir
+            if (session.state != "CLOSED") {
+                if (session.client) {
+                    var resultrestartService = await session.client.then(async client => {
+                        return await client.restartService();
+                    });
+                    return resultrestartService;
+                }
+            } else { //close
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
     } //restartService
     //
     // Get device info
     static async getHostDevice(sessionName) {
+        console.log("- getHostDevice");
         var session = Sessions.getSession(sessionName);
-        var resultgetHostDevice = await session.client.then(async client => {
-            return await client.getHostDevice();
-        });
-        return resultgetHostDevice;
+        if (session) { //só adiciona se não existir
+            if (session.state != "CLOSED") {
+                if (session.client) {
+                    var resultgetHostDevice = await session.client.then(async client => {
+                        return await client.getHostDevice();
+                    });
+                    return resultgetHostDevice;
+                }
+            } else { //close
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
     } //getHostDevice
     //
     // Get connection state
     static async getConnectionState(sessionName) {
+        console.log("- getConnectionState");
         var session = Sessions.getSession(sessionName);
-        var resultisConnected = await session.client.then(async client => {
-            return await client.getConnectionState();
-        });
-        return resultisConnected;
+        if (session) { //só adiciona se não existir
+            if (session.state != "CLOSED") {
+                if (session.client) {
+
+                    var resultisConnected = await session.client.then(async client => {
+                        return await client.getConnectionState();
+                    });
+                    return resultisConnected;
+                }
+            } else { //close
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
     } //getConnectionState
     //
     // Get battery level
     static async getBatteryLevel(sessionName) {
+        console.log("- getBatteryLevel");
         var session = Sessions.getSession(sessionName);
-        var resultgetBatteryLevel = await session.client.then(async client => {
-            return await client.getBatteryLevel();
-        });
-        return resultgetBatteryLevel;
+        if (session) { //só adiciona se não existir
+            if (session.state != "CLOSED") {
+                if (session.client) {
+                    var resultgetBatteryLevel = await session.client.then(async client => {
+                        return await client.getBatteryLevel();
+                    });
+                    return resultgetBatteryLevel;
+                }
+            } else { //close
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
     } //getBatteryLevel
     //
     // Is Connected
     static async isConnected(sessionName) {
+        console.log("- isConnected");
         var session = Sessions.getSession(sessionName);
-        var resultisConnected = await session.client.then(async client => {
-            return await client.isConnected();
-        });
-        return resultisConnected;
+        if (session) { //só adiciona se não existir
+            if (session.state != "CLOSED") {
+                if (session.client) {
+                    var resultisConnected = await session.client.then(async client => {
+                        return await client.isConnected();
+                    });
+                    return resultisConnected;
+                }
+            } else { //close
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
     } //isConnected
     //
-      // Get whatsapp web version
-      static async getWAVersion(sessionName) {
+    // Get whatsapp web version
+    static async getWAVersion(sessionName) {
+        console.log("- getWAVersion");
         var session = Sessions.getSession(sessionName);
-        var resultgetWAVersion = await session.client.then(async client => {
-            return await client.getWAVersion();
-        });
-        return resultgetWAVersion;
+        if (session) { //só adiciona se não existir
+            if (session.state != "CLOSED") {
+                if (session.client) {
+                    var resultgetWAVersion = await session.client.then(async client => {
+                        return await client.getWAVersion();
+                    });
+                    return resultgetWAVersion;
+                }
+            } else { //close
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
     } //getWAVersion
     //
     //
@@ -871,7 +1133,7 @@ module.exports = class Sessions {
             };
         }
     } //sendFile
-        //
+    //
     // ------------------------------------------------------------------------------------------------//
     //
     //
@@ -1814,7 +2076,7 @@ module.exports = class Sessions {
                     return await client.createGroup(groupname, [
                         '111111111111@c.us',
                         '222222222222@c.us',
-                      ]).then((result) => {
+                    ]).then((result) => {
                         //console.log('Result: ', result); //return object success
                         return result;
                     }).catch((erro) => {
