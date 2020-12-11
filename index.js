@@ -46,7 +46,7 @@ if (ssl === true) { //with ssl
 } // End the server web
 //
 // Nome de sessão de teste
-Sessions.start('c002928a-ff53-46c1-99f1-b2622d7fe84a');
+//Sessions.start('c002928a-ff53-46c1-99f1-b2622d7fe84a');
 //
 /*
 web.post('/file_upload', upload.single('file'), (req, res, next) => {

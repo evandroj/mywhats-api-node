@@ -318,6 +318,7 @@ module.exports = class Sessions {
                 return {
                     result: "success",
                     state: session.state,
+                    status: session.status,
                     message: "Sistema fechado"
                 };
             } else { //close
@@ -325,27 +326,31 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
             }
         } else {
             return {
-                result: "error",
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //closeSession
@@ -360,8 +365,7 @@ module.exports = class Sessions {
         var resultkillServiceWorker = await session.client.then(async client => {
             return await client.killServiceWorker();
         });
-        console.log("- killServiceWorker:", resultkillServiceWorker);
-        session.state = resultkillServiceWorker;
+        return resultkillServiceWorker;
     } //killServiceWorker
     //
     // Load the service again
@@ -370,7 +374,7 @@ module.exports = class Sessions {
         var resultrestartService = await session.client.then(async client => {
             return await client.restartService();
         });
-        console.log("- restartService:", resultisrestartService);
+        return resultrestartService;
     } //restartService
     //
     // Get device info
@@ -379,7 +383,7 @@ module.exports = class Sessions {
         var resultgetHostDevice = await session.client.then(async client => {
             return await client.getHostDevice();
         });
-        console.log("- getHostDevice:", resultgetHostDevice);
+        return resultgetHostDevice;
     } //getHostDevice
     //
     // Get connection state
@@ -388,7 +392,7 @@ module.exports = class Sessions {
         var resultisConnected = await session.client.then(async client => {
             return await client.getConnectionState();
         });
-        console.log("- getConnectionState:", resultisConnected);
+        return resultisConnected;
     } //getConnectionState
     //
     // Get battery level
@@ -397,7 +401,7 @@ module.exports = class Sessions {
         var resultgetBatteryLevel = await session.client.then(async client => {
             return await client.getBatteryLevel();
         });
-        console.log("- isConnected:", resultgetBatteryLevel);
+        return resultgetBatteryLevel;
     } //getBatteryLevel
     //
     // Is Connected
@@ -406,7 +410,7 @@ module.exports = class Sessions {
         var resultisConnected = await session.client.then(async client => {
             return await client.isConnected();
         });
-        console.log("- isConnected:", resultisConnected);
+        return resultisConnected;
     } //isConnected
     //
       // Get whatsapp web version
@@ -415,7 +419,7 @@ module.exports = class Sessions {
         var resultgetWAVersion = await session.client.then(async client => {
             return await client.getWAVersion();
         });
-        console.log("- isConnected:", resultgetWAVersion);
+        return resultgetWAVersion;
     } //getWAVersion
     //
     //
@@ -446,18 +450,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -465,8 +472,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //sendText
@@ -527,26 +535,31 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
             }
         } else {
             return {
-                result: "error",
-                message: "NOTFOUND"
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //sendTextMult
@@ -574,18 +587,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -593,8 +609,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //sendText
@@ -627,18 +644,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -646,8 +666,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //sendImage
@@ -717,18 +738,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -736,8 +760,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //sendImage
@@ -766,18 +791,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -785,8 +813,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //sendImageGrup
@@ -821,12 +850,14 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 }
@@ -834,8 +865,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //sendFile
@@ -865,18 +897,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -884,8 +919,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //getSessionTokenBrowser
@@ -916,18 +952,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -935,8 +974,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //getBlockList
@@ -985,8 +1025,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //getAllContacts
@@ -1016,18 +1057,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -1035,8 +1079,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //loadAndGetAllMessagesInChat
@@ -1066,18 +1111,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -1085,8 +1133,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //getStatus
@@ -1116,18 +1165,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -1135,8 +1187,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //getNumberProfile
@@ -1166,18 +1219,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -1185,8 +1241,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //getAllUnreadMessages
@@ -1216,18 +1273,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -1235,8 +1295,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //getAllChats
@@ -1266,18 +1327,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -1285,8 +1349,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //getAllGroups
@@ -1316,18 +1381,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -1335,8 +1403,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //getProfilePicFromServer
@@ -1366,18 +1435,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -1385,8 +1457,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //getChat
@@ -1417,27 +1490,31 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
             }
         } else {
             return {
-                result: "error",
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //checkNumberStatus
@@ -1490,27 +1567,31 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
             }
         } else {
             return {
-                result: "error",
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //sendTextMult
@@ -1541,18 +1622,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -1560,8 +1644,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //leaveGroup
@@ -1588,18 +1673,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -1607,8 +1695,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //getGroupMembers
@@ -1635,18 +1724,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -1654,8 +1746,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //getGroupMembersIds
@@ -1682,18 +1775,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -1701,8 +1797,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //getGroupInviteLink
@@ -1732,18 +1829,21 @@ module.exports = class Sessions {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema iniciando"
                     };
                 } else if (session.state == "QRCODE") {
                     return {
                         result: "warning",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema aguardando leitura do QR-Code"
                     };
                 } else if (session.state == "CLOSED") {
                     return {
                         result: "info",
                         state: session.state,
+                        status: session.status,
                         message: "Sistema encerrado"
                     };
                 }
@@ -1751,8 +1851,9 @@ module.exports = class Sessions {
         } else {
             return {
                 result: 'error',
-                state: "NOTFOUND",
-                message: "Sistema Off-line"
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
             };
         }
     } //createGroup
