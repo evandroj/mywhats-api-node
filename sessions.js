@@ -84,7 +84,6 @@ module.exports = class Sessions {
     //
     //
     static getSession(sessionName) {
-        //console.log("- Obtendo sessão");
         var foundSession = false;
         if (Sessions.sessions)
             Sessions.sessions.forEach(session => {
@@ -260,29 +259,34 @@ module.exports = class Sessions {
             });
             // Listen to ack's
             client.onAck((ack) => {
-                if (ack == '-7') {
+                //
+                const jsonStr = JSON.stringify(obj);
+                //console.log(JSON.parse(jsonStr));
+                const retur_ack = JSON.parse(jsonStr);
+                //
+                if (retur_ack.ack == '-7') {
                     var str_ack = "MD_DOWNGRADE";
-                } else if (ack == '-6') {
+                } else if (retur_ack.ack == '-6') {
                     var str_ack = "INACTIVE";
-                } else if (ack == '-5') {
+                } else if (retur_ack.ack == '-5') {
                     var str_ack = "CONTENT_UNUPLOADABLE";
-                } else if (ack == '-4') {
+                } else if (retur_ack.ack == '-4') {
                     var str_ack = "CONTENT_TOO_BIG";
-                } else if (ack == '-3') {
+                } else if (retur_ack.ack == '-3') {
                     var str_ack = "CONTENT_GONE";
-                } else if (ack == '-2') {
+                } else if (retur_ack.ack == '-2') {
                     var str_ack = "EXPIRED";
-                } else if (ack == '-1') {
+                } else if (retur_ack.ack == '-1') {
                     var str_ack = "FAILED";
-                } else if (ack == '0') {
+                } else if (retur_ack.ack == '0') {
                     var str_ack = "CLOCK";
-                } else if (ack == '1') {
+                } else if (retur_ack.ack == '1') {
                     var str_ack = "SENT";
-                } else if (ack == '2') {
+                } else if (retur_ack.ack == '2') {
                     var str_ack = "RECEIVED";
-                } else if (ack == '3') {
+                } else if (retur_ack.ack == '3') {
                     var str_ack = "READ";
-                } else if (ack == '4') {
+                } else if (retur_ack.ack == '4') {
                     var str_ack = "PLAYED";
                 } else {
                     var str_ack = "DESCONHECIDO";

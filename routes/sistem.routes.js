@@ -15,9 +15,10 @@ function soNumeros(string) {
     return parseInt(numsStr);
 }
 //
+//
 // ------------------------------------------------------------------------------------------------//
 //
-// Funções básicas (uso)
+// 
 //
 router.post("/Start", async (req, res, next) => {
     //
@@ -118,9 +119,49 @@ router.post("/Close", async (req, res, next) => {
 }); //close
 //
 //
-// ------------------------------------------------------------------------------------------------------- //
+// ------------------------------------------------------------------------------------------------//
+//
+// Device Functions
+//
+router.post("/killServiceWorker", async (req, res, next) => {
+    var result = await Sessions.killServiceWorker(req.body.SessionName);
+    res.json(result);
+}); //killServiceWorker
+//
+router.post("/restartService", async (req, res, next) => {
+    var result = await Sessions.restartService(req.body.SessionName);
+    res.json(result);
+}); //restartService
+//
+router.post("/getHostDevice", async (req, res, next) => {
+    var result = await Sessions.getHostDevice(req.body.SessionName);
+    res.json(result);
+}); //getHostDevice
+//
+router.post("/getConnectionState", async (req, res, next) => {
+    var result = await Sessions.getConnectionState(req.body.SessionName);
+    res.json(result);
+}); //getConnectionState
+//
+router.post("/getBatteryLevel", async (req, res, next) => {
+    var result = await Sessions.getBatteryLevel(req.body.SessionName);
+    res.json(result);
+}); //getBatteryLevel
+//
+router.post("/isConnected", async (req, res, next) => {
+    var result = await Sessions.isConnected(req.body.SessionName);
+    res.json(result);
+}); //isConnected
+//
+router.post("/getWAVersion", async (req, res, next) => {
+    var result = await Sessions.getWAVersion(req.body.SessionName);
+    res.json(result);
+}); //getWAVersion
 //
 //
+// ------------------------------------------------------------------------------------------------//
+//
+// Funções básicas (uso)
 router.post("/sendText", async (req, res, next) => {
     var result = await Sessions.sendText(
         req.body.SessionName,
