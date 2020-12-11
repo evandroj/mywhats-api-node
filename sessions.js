@@ -2071,13 +2071,13 @@ module.exports = class Sessions {
     } //getGroupInviteLink
     //
     // Criar grupo (título, participantes a adicionar)
-    static async createGroup(sessionName, groupname, contatos) {
+    static async createGroup(sessionName, groupId, contatos) {
         console.log("- Obtendo chats!");
         var session = Sessions.getSession(sessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetGroupInviteLink = await session.client.then(async client => {
-                    return await client.createGroup(groupname, [
+                    return await client.createGroup(groupId, [
                         '111111111111@c.us',
                         '222222222222@c.us',
                     ]).then((result) => {
@@ -2123,6 +2123,369 @@ module.exports = class Sessions {
             };
         }
     } //createGroup
+    //
+    // Remove participant
+    static async removeParticipant(sessionName, groupoid, contato) {
+        console.log("- removeParticipant");
+        var session = Sessions.getSession(sessionName);
+        if (session) {
+            if (session.state == "CONNECTED") {
+                var resultremoveParticipant = await session.client.then(async client => {
+                    return await client.removeParticipant(groupoid + '@g.us', contato + '@c.us').then((result) => {
+                        //console.log('Result: ', result); //return object success
+                        return result;
+                    }).catch((erro) => {
+                        //console.error('Error when sending: ', erro); //return object error
+                        return erro;
+                    });
+                });
+                return resultremoveParticipant;
+                //return { result: "success" };
+            } else {
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
+    } //removeParticipant
+    //
+	//
+    // Add participant
+    static async addParticipant(sessionName, groupoid, contato) {
+        console.log("- Obtendo chats!");
+        var session = Sessions.getSession(sessionName);
+        if (session) {
+            if (session.state == "CONNECTED") {
+                var resultaddParticipant = await session.client.then(async client => {
+                    return await client.addParticipant(groupoid + '@g.us', contato + '@c.us').then((result) => {
+                        //console.log('Result: ', result); //return object success
+                        return result;
+                    }).catch((erro) => {
+                        //console.error('Error when sending: ', erro); //return object error
+                        return erro;
+                    });
+                });
+                return resultaddParticipant;
+                //return { result: "success" };
+            } else {
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
+    } //addParticipant
+    //
+	//
+    // Promote participant (Give admin privileges)
+    static async promoteParticipant(sessionName, groupoid, contato) {
+        console.log("- Obtendo chats!");
+        var session = Sessions.getSession(sessionName);
+        if (session) {
+            if (session.state == "CONNECTED") {
+                var resultpromoteParticipant = await session.client.then(async client => {
+                    return await client.promoteParticipant(groupoid + '@g.us', contato + '@c.us').then((result) => {
+                        //console.log('Result: ', result); //return object success
+                        return result;
+                    }).catch((erro) => {
+                        //console.error('Error when sending: ', erro); //return object error
+                        return erro;
+                    });
+                });
+                return resultpromoteParticipant;
+                //return { result: "success" };
+            } else {
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
+    } //promoteParticipant
+    //
+	//
+    // Demote particiapnt (Revoke admin privileges)
+    static async demoteParticipant(sessionName, groupoid, contato) {
+        console.log("- Obtendo chats!");
+        var session = Sessions.getSession(sessionName);
+        if (session) {
+            if (session.state == "CONNECTED") {
+                var resultdemoteParticipant = await session.client.then(async client => {
+                    return await client.demoteParticipant(groupoid + '@g.us', contato + '@c.us').then((result) => {
+                        //console.log('Result: ', result); //return object success
+                        return result;
+                    }).catch((erro) => {
+                        //console.error('Error when sending: ', erro); //return object error
+                        return erro;
+                    });
+                });
+                return resultdemoteParticipant;
+                //return { result: "success" };
+            } else {
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
+    } //demoteParticipant
+    //
+	//
+    // Get group admins
+    static async getGroupAdmins(sessionName, groupoid, contato) {
+        console.log("- Obtendo chats!");
+        var session = Sessions.getSession(sessionName);
+        if (session) {
+            if (session.state == "CONNECTED") {
+                var resultgetGroupAdmins = await session.client.then(async client => {
+                    return await client.getGroupAdmins(groupoid + '@g.us', contato + '@c.us').then((result) => {
+                        //console.log('Result: ', result); //return object success
+                        return result;
+                    }).catch((erro) => {
+                        //console.error('Error when sending: ', erro); //return object error
+                        return erro;
+                    });
+                });
+                return resultgetGroupAdmins;
+                //return { result: "success" };
+            } else {
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
+    } //getGroupAdmins
+    //
+	//
+    // Return the group status, jid, description from it's invite link
+    static async getGroupInfoFromInviteLink(sessionName, groupoid, contato) {
+        console.log("- Obtendo chats!");
+        var session = Sessions.getSession(sessionName);
+        if (session) {
+            if (session.state == "CONNECTED") {
+                var resultgetGroupInfoFromInviteLink = await session.client.then(async client => {
+                    return await client.createGroup(groupoid + '@g.us', contato + '@c.us').then((result) => {
+                        //console.log('Result: ', result); //return object success
+                        return result;
+                    }).catch((erro) => {
+                        //console.error('Error when sending: ', erro); //return object error
+                        return erro;
+                    });
+                });
+                return resultgetGroupInfoFromInviteLink;
+                //return { result: "success" };
+            } else {
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
+    } //getGroupInfoFromInviteLink
+    //
+	//
+    // Join a group using the group invite code
+    static async joinGroup(sessionName, groupoid, contato) {
+        console.log("- Obtendo chats!");
+        var session = Sessions.getSession(sessionName);
+        if (session) {
+            if (session.state == "CONNECTED") {
+                var resultjoinGroup = await session.client.then(async client => {
+                    return await client.joinGroup(groupoid + '@g.us', contato + '@c.us').then((result) => {
+                        //console.log('Result: ', result); //return object success
+                        return result;
+                    }).catch((erro) => {
+                        //console.error('Error when sending: ', erro); //return object error
+                        return erro;
+                    });
+                });
+                return resultjoinGroup;
+                //return { result: "success" };
+            } else {
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
+    } //joinGroup
     //
     //
     // ------------------------------------------------------------------------------------------------//
