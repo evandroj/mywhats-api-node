@@ -43,13 +43,16 @@ $ node index.js
 # Manter os processos ativos a cada reinicialização do servidor
 sudo npm install pm2 -g
 
-pm2 start index.js
+$ pm2 start index.js
 
-pm2 save
+$ pm2 save
 
-pm2 startup
+$ pm2 startup
 
-sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u ${USER} --hp /home/${USER}
+$ sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u ${USER} --hp /home/${USER}
+
+# Para remover do init script
+$ pm2 unstartup systemd
 
 # O servidor iniciará na porta:9000
 
