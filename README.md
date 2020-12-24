@@ -32,7 +32,7 @@ $ sudo apt autoremove -y
 $ git clone https://github.com/AlanMartines/mywhats-api-node.git
 
 # Acesse a pasta do projeto no terminal/cmd
-$ cd mywhats-api
+$ cd mywhats-api-node
 
 # Instale as dependências
 $ npm install
