@@ -63,7 +63,14 @@ router.post("/QRCode", async (req, res, next) => {
     //
     var session = Sessions.getSession(req.body.SessionName);
     if (session != false) {
-        if (session.state != 'CONNECTED' && session.status != 'inChat' || session.status != 'isLogged') {
+        if (session.state == 'CONNECTED') {
+            res.status(200).json({
+                result: 'success',
+                state: session.state,
+                status: session.status,
+                message: "Sistema iniciado"
+            });
+        } else if (session.state != 'CONNECTED' && session.status != 'inChat' || session.status != 'isLogged') {
             if (req.body.View == 'True' || req.body.View == 'true') {
                 session.qrcode = session.qrcode.replace('data:image/png;base64,', '');
                 const imageBuffer = Buffer.from(session.qrcode, 'base64');

@@ -307,7 +307,7 @@ module.exports = class Sessions {
         console.log("- Fechando sessão");
         var session = Sessions.getSession(sessionName);
         if (session) { //só adiciona se não existir
-            if (session.state != "CLOSED") {
+            if (session.state == "CONNECTED") {
                 if (session.client) {
                     await session.client.then(async client => {
                         try {
@@ -370,7 +370,7 @@ module.exports = class Sessions {
         console.log("- killServiceWorker");
         var session = Sessions.getSession(sessionName);
         if (session) { //só adiciona se não existir
-            if (session.state != "CLOSED") {
+            if (session.state == "CONNECTED") {
                 if (session.client) {
                     var resultkillServiceWorker = await session.client.then(async client => {
                         return await client.killServiceWorker();
@@ -416,7 +416,7 @@ module.exports = class Sessions {
         console.log("- restartService");
         var session = Sessions.getSession(sessionName);
         if (session) { //só adiciona se não existir
-            if (session.state != "CLOSED") {
+            if (session.state == "CONNECTED") {
                 if (session.client) {
                     var resultrestartService = await session.client.then(async client => {
                         return await client.restartService();
@@ -462,7 +462,7 @@ module.exports = class Sessions {
         console.log("- getHostDevice");
         var session = Sessions.getSession(sessionName);
         if (session) { //só adiciona se não existir
-            if (session.state != "CLOSED") {
+            if (session.state == "CONNECTED") {
                 if (session.client) {
                     var resultgetHostDevice = await session.client.then(async client => {
                         return await client.getHostDevice();
@@ -508,7 +508,7 @@ module.exports = class Sessions {
         console.log("- getConnectionState");
         var session = Sessions.getSession(sessionName);
         if (session) { //só adiciona se não existir
-            if (session.state != "CLOSED") {
+            if (session.state == "CONNECTED") {
                 if (session.client) {
 
                     var resultisConnected = await session.client.then(async client => {
@@ -555,7 +555,7 @@ module.exports = class Sessions {
         console.log("- getBatteryLevel");
         var session = Sessions.getSession(sessionName);
         if (session) { //só adiciona se não existir
-            if (session.state != "CLOSED") {
+            if (session.state == "CONNECTED") {
                 if (session.client) {
                     var resultgetBatteryLevel = await session.client.then(async client => {
                         return await client.getBatteryLevel();
@@ -601,7 +601,7 @@ module.exports = class Sessions {
         console.log("- isConnected");
         var session = Sessions.getSession(sessionName);
         if (session) { //só adiciona se não existir
-            if (session.state != "CLOSED") {
+            if (session.state == "CONNECTED") {
                 if (session.client) {
                     var resultisConnected = await session.client.then(async client => {
                         return await client.isConnected();
@@ -647,7 +647,7 @@ module.exports = class Sessions {
         console.log("- getWAVersion");
         var session = Sessions.getSession(sessionName);
         if (session) { //só adiciona se não existir
-            if (session.state != "CLOSED") {
+            if (session.state == "CONNECTED") {
                 if (session.client) {
                     var resultgetWAVersion = await session.client.then(async client => {
                         return await client.getWAVersion();
