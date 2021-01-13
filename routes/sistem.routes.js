@@ -20,6 +20,7 @@ function soNumeros(string) {
 //
 // 
 //
+//
 router.post("/Start", async (req, res, next) => {
     //
     var session = await Sessions.start(req.body.SessionName);
@@ -120,6 +121,17 @@ router.post("/QRCode", async (req, res, next) => {
 // ------------------------------------------------------------------------------------------------------- //
 //
 //
+router.post("/Status", async (req, res, next) => {
+    var result = await Sessions.Status(
+        req.body.SessionName
+    );
+    res.json(result);
+}); //getStatus
+//
+//
+// ------------------------------------------------------------------------------------------------//
+//
+//
 router.post("/Close", async (req, res, next) => {
     var result = await Sessions.closeSession(req.body.SessionName);
     res.json(result);
@@ -201,7 +213,7 @@ router.post("/sendTextGrupo", async (req, res, next) => {
 }); //sendText
 //
 //
-// ------------------------------------------------------------------------------------------------//
+// ------------------------------------------------------------------------------------------------------- //
 //
 //
 router.post("/sendImage", upload.single('fileimg'), async (req, res, next) => {
@@ -251,7 +263,8 @@ router.post("/sendImageGrupo", upload.single('FileImageGrupo'), async (req, res,
     res.json(result);
 }); //sendImage
 //
-// ------------------------------------------------------------------------------------------------//
+//
+// ------------------------------------------------------------------------------------------------------- //
 //
 //
 router.get("/sendFile", async (req, res, next) => {
@@ -265,7 +278,17 @@ router.get("/sendFile", async (req, res, next) => {
     res.json(result);
 }); //sendFile
 //
-// ------------------------------------------------------------------------------------------------//
+//
+// ------------------------------------------------------------------------------------------------------- //
+//
+//
+router.post("/getListMute", async (req, res, next) => {
+    var result = await Sessions.getListMute(req.body.SessionName);
+    res.json(result);
+}); //getListMute
+//
+//
+// ------------------------------------------------------------------------------------------------------- //
 //
 //
 router.post("/getSessionTokenBrowser", async (req, res, next) => {
@@ -273,7 +296,9 @@ router.post("/getSessionTokenBrowser", async (req, res, next) => {
     res.json(result);
 }); //getBlockList
 //
-// ------------------------------------------------------------------------------------------------//
+//
+// ------------------------------------------------------------------------------------------------------- //
+//
 //
 // Recuperando Dados
 //
@@ -282,7 +307,8 @@ router.post("/getBlockList", async (req, res, next) => {
     res.json(result);
 }); //getBlockList
 //
-// ------------------------------------------------------------------------------------------------//
+//
+// ------------------------------------------------------------------------------------------------------- //
 //
 //
 router.post("/getAllContacts", async (req, res, next) => {
@@ -290,7 +316,32 @@ router.post("/getAllContacts", async (req, res, next) => {
     res.json(result);
 }); //getAllContacts
 //
-// ------------------------------------------------------------------------------------------------//
+//
+// ------------------------------------------------------------------------------------------------------- //
+//
+//
+router.post("/getAllMessagesInChat", async (req, res, next) => {
+    var result = await Sessions.getAllMessagesInChat(
+        req.body.SessionName,
+        soNumeros(req.body.phonefull)
+        );
+    res.json(result);
+}); //getAllMessagesInChat
+//
+//
+// ------------------------------------------------------------------------------------------------------- //
+//
+//
+router.post("/loadEarlierMessages", async (req, res, next) => {
+    var result = await Sessions.loadEarlierMessages(
+        req.body.SessionName,
+        soNumeros(req.body.phonefull)
+    );
+    res.json(result);
+}); //loadEarlierMessages
+//
+//
+// ------------------------------------------------------------------------------------------------------- //
 //
 //
 router.post("/loadAndGetAllMessagesInChat", async (req, res, next) => {
@@ -300,6 +351,7 @@ router.post("/loadAndGetAllMessagesInChat", async (req, res, next) => {
     );
     res.json(result);
 }); //loadAndGetAllMessagesInChat
+//
 //
 // ------------------------------------------------------------------------------------------------//
 //
@@ -312,7 +364,8 @@ router.post("/getStatus", async (req, res, next) => {
     res.json(result);
 }); //getStatus
 //
-// ------------------------------------------------------------------------------------------------//
+//
+// ------------------------------------------------------------------------------------------------------- //
 //
 //
 router.post("/getNumberProfile", async (req, res, next) => {
@@ -323,7 +376,8 @@ router.post("/getNumberProfile", async (req, res, next) => {
     res.json(result);
 }); //getNumberProfile
 //
-// ------------------------------------------------------------------------------------------------//
+//
+// ------------------------------------------------------------------------------------------------------- //
 //
 //
 router.post("/getAllUnreadMessages", async (req, res, next) => {
@@ -331,7 +385,8 @@ router.post("/getAllUnreadMessages", async (req, res, next) => {
     res.json(result);
 }); //getAllUnreadMessages
 //
-// ------------------------------------------------------------------------------------------------//
+//
+// ------------------------------------------------------------------------------------------------------- //
 //
 //
 router.post("/getAllChats", async (req, res, next) => {
@@ -339,7 +394,8 @@ router.post("/getAllChats", async (req, res, next) => {
     res.json(result);
 }); //getAllChats
 //
-// ------------------------------------------------------------------------------------------------//
+//
+// ------------------------------------------------------------------------------------------------------- //
 //
 //
 router.post("/getAllGroups", async (req, res, next) => {
@@ -347,7 +403,8 @@ router.post("/getAllGroups", async (req, res, next) => {
     res.json(result);
 }); //getAllGroups
 //
-// ------------------------------------------------------------------------------------------------//
+//
+// ------------------------------------------------------------------------------------------------------- //
 //
 //
 router.post("/getProfilePicFromServer", async (req, res, next) => {
@@ -358,7 +415,8 @@ router.post("/getProfilePicFromServer", async (req, res, next) => {
     res.json(result);
 }); //getProfilePicFromServer
 //
-// ------------------------------------------------------------------------------------------------//
+//
+// ------------------------------------------------------------------------------------------------------- //
 //
 //
 router.post("/getChat", async (req, res, next) => {
@@ -366,7 +424,8 @@ router.post("/getChat", async (req, res, next) => {
     res.json(result);
 }); //getChat
 //
-// ------------------------------------------------------------------------------------------------//
+//
+// ------------------------------------------------------------------------------------------------------- //
 //
 //
 router.post("/checkNumberStatus", async (req, res, next) => {
@@ -388,7 +447,9 @@ router.post("/checkNumberStatusMult", upload.single('checkNumberStatusMassaConta
     res.json(result);
 }); //sendText
 //
-// ------------------------------------------------------------------------------------------------//
+//
+// ------------------------------------------------------------------------------------------------------- //
+//
 //
 // Funções de Grupo
 //
@@ -398,7 +459,7 @@ router.post("/leaveGroup", async (req, res, next) => {
         req.body.groupId
     );
     res.json(result);
-}); //close
+}); //leaveGroup
 //
 router.post("/getGroupMembers", async (req, res, next) => {
     var result = await Sessions.getGroupMembers(

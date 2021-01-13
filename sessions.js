@@ -22,7 +22,7 @@ function soNumeros(string) {
 }
 //
 module.exports = class Sessions {
-    //
+//
     static async start(sessionName) {
         //console.log("- Criando sessão "+ sessionName);
         Sessions.sessions = Sessions.sessions || []; //start array
@@ -302,6 +302,55 @@ module.exports = class Sessions {
     //
     // ------------------------------------------------------------------------------------------------//
     //
+    static async Status(sessionName) {
+        console.log("- Status");
+        var session = Sessions.getSession(sessionName);
+        if (session) { //só adiciona se não existir
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                }  else if (session.state == "CONNECTED") {
+                    return {
+                        result: "success",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciado"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                } else {
+		            return {
+		                result: 'error',
+		                state: 'NOTFOUND',
+		                status: 'notLogged',
+		                message: 'Sistema Off-line'
+		            };
+		        }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
+    } //status
     //
     static async closeSession(sessionName) {
         console.log("- Fechando sessão");
@@ -514,7 +563,7 @@ module.exports = class Sessions {
                     var resultisConnected = await session.client.then(async client => {
                         return await client.getConnectionState();
                     });
-                    return resultisConnected;
+                    return { ConnectionState: resultisConnected };
                 }
             } else { //close
                 if (session.state == "STARTING") {
@@ -560,7 +609,7 @@ module.exports = class Sessions {
                     var resultgetBatteryLevel = await session.client.then(async client => {
                         return await client.getBatteryLevel();
                     });
-                    return resultgetBatteryLevel;
+                    return { BatteryLevel: resultgetBatteryLevel };
                 }
             } else { //close
                 if (session.state == "STARTING") {
@@ -606,7 +655,7 @@ module.exports = class Sessions {
                     var resultisConnected = await session.client.then(async client => {
                         return await client.isConnected();
                     });
-                    return resultisConnected;
+                    return { isConnected: resultisConnected };
                 }
             } else { //close
                 if (session.state == "STARTING") {
@@ -652,7 +701,7 @@ module.exports = class Sessions {
                     var resultgetWAVersion = await session.client.then(async client => {
                         return await client.getWAVersion();
                     });
-                    return resultgetWAVersion;
+                    return { WAVersion: resultgetWAVersion };
                 }
             } else { //close
                 if (session.state == "STARTING") {
@@ -1140,6 +1189,59 @@ module.exports = class Sessions {
     //
     // ------------------------------------------------------------------------------------------------//
     //
+    // Returns a list of mute and non-mute users
+    // "all" List all mutes
+    // "toMute" List all silent chats
+    // "noMute" List all chats without silence
+    static async getListMute(sessionName) {
+        console.log("- Obtendo lista de bloqueados!");
+        var session = Sessions.getSession(sessionName);
+        if (session) {
+            if (session.state == "CONNECTED") {
+                var resultgetListMute = await session.client.then(async client => {
+                    return await client.getListMute().then((result) => {
+                        //console.log('Result: ', result); //return object success
+                        return result;
+                    }).catch((erro) => {
+                        //console.error('Error when sending: ', erro); //return object error
+                        return erro;
+                    });
+                });
+                return resultgetListMute;
+                //return { result: "success" };
+            } else {
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
+    } //getSessionTokenBrowser
     //
     // Returns browser session token
     static async getSessionTokenBrowser(sessionName) {
@@ -1194,7 +1296,7 @@ module.exports = class Sessions {
     //
     // ------------------------------------------------------------------------------------------------//
     //
-    // Recuperando Dados
+    // Retrieving Data
     //
     // Chama sua lista de contatos bloqueados (retorna uma matriz)
     static async getBlockList(sessionName) {
@@ -1300,10 +1402,111 @@ module.exports = class Sessions {
     //
     // ------------------------------------------------------------------------------------------------//
     //
+    // Retrieve messages in chat
+    //getAllMessagesInChat
+    static async getAllMessagesInChat(sessionName, numero) {
+        console.log("- AllMessagesInCha");
+        var session = Sessions.getSession(sessionName);
+        if (session) {
+            if (session.state == "CONNECTED") {
+                var resultgetAllMessagesInChat = await session.client.then(async client => {
+                    return await client.getAllMessagesInChat(soNumeros(numero) + '@c.us').then((result) => {
+                        //console.log('Result: ', result); //return object success
+                        return result;
+                    }).catch((erro) => {
+                        //console.error('Error when sending: ', erro); //return object error
+                        return erro;
+                    });
+                });
+                return resultgetAllMessagesInChat;
+            } else {
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
+    } // getAllMessagesInChat
     //
-    // Recupere todas as mensagens no chat
+    // Retrieve more chat message
+    static async loadEarlierMessages(sessionName, numero) {
+        console.log("- loadEarlierMessages");
+        var session = Sessions.getSession(sessionName);
+        if (session) {
+            if (session.state == "CONNECTED") {
+                var resultloadEarlierMessages = await session.client.then(async client => {
+                    return await client.loadEarlierMessages(soNumeros(numero) + '@c.us').then((result) => {
+                        //console.log('Result: ', result); //return object success
+                        return result;
+                    }).catch((erro) => {
+                        //console.error('Error when sending: ', erro); //return object error
+                        return erro;
+                    });
+                });
+                return resultloadEarlierMessages;
+                //return { result: "success" };
+            } else {
+                if (session.state == "STARTING") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema iniciando"
+                    };
+                } else if (session.state == "QRCODE") {
+                    return {
+                        result: "warning",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema aguardando leitura do QR-Code"
+                    };
+                } else if (session.state == "CLOSED") {
+                    return {
+                        result: "info",
+                        state: session.state,
+                        status: session.status,
+                        message: "Sistema encerrado"
+                    };
+                }
+            }
+        } else {
+            return {
+                result: 'error',
+                state: 'NOTFOUND',
+                status: 'notLogged',
+                message: 'Sistema Off-line'
+            };
+        }
+    } //loadEarlierMessages
+    //
+    // Retrieve all messages in chat
     static async loadAndGetAllMessagesInChat(sessionName, numero) {
-        console.log("- Obtendo todas as mensagens no chat!");
+        console.log("- loadAndGetAllMessagesInChat!");
         var session = Sessions.getSession(sessionName);
         if (session) {
             if (session.state == "CONNECTED") {
@@ -1354,8 +1557,7 @@ module.exports = class Sessions {
     //
     // ------------------------------------------------------------------------------------------------//
     //
-    //
-    // Recuperar status de contato
+    // Retrieve contact status
     static async getStatus(sessionName, numero) {
         console.log("- Obtendo status!");
         var session = Sessions.getSession(sessionName);
@@ -1370,7 +1572,7 @@ module.exports = class Sessions {
                         return erro;
                     });
                 });
-                return resultgetStatus;
+                return { getStatus: resultgetStatus };
                 //return { result: "success" };
             } else {
                 if (session.state == "STARTING") {
@@ -1405,6 +1607,7 @@ module.exports = class Sessions {
             };
         }
     } //getStatus
+    //
     //
     // ------------------------------------------------------------------------------------------------//
     //
@@ -1459,6 +1662,7 @@ module.exports = class Sessions {
             };
         }
     } //getNumberProfile
+    //
     //
     // ------------------------------------------------------------------------------------------------//
     //
@@ -1632,7 +1836,7 @@ module.exports = class Sessions {
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetProfilePicFromServer = await session.client.then(async client => {
-                    return await client.getProfilePicFromServer(soNumeros(numero) + '@g.us').then((result) => {
+                    return await client.getProfilePicFromServer(soNumeros(numero) + '@c.us').then((result) => {
                         //console.log('Result: ', result); //return object success
                         return result;
                     }).catch((erro) => {
@@ -1640,7 +1844,7 @@ module.exports = class Sessions {
                         return erro;
                     });
                 });
-                return resultgetProfilePicFromServer;
+                return { ProfilePicFromServer: resultgetProfilePicFromServer };
                 //return { result: "success" };
             } else {
                 if (session.state == "STARTING") {
@@ -2071,13 +2275,13 @@ module.exports = class Sessions {
     } //getGroupInviteLink
     //
     // Criar grupo (título, participantes a adicionar)
-    static async createGroup(sessionName, groupId, contatos) {
+    static async createGroup(sessionName, GroupName, contactList) {
         console.log("- Obtendo chats!");
         var session = Sessions.getSession(sessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetGroupInviteLink = await session.client.then(async client => {
-                    return await client.createGroup(groupId, [
+                    return await client.createGroup(GroupName, [
                         '111111111111@c.us',
                         '222222222222@c.us',
                     ]).then((result) => {
