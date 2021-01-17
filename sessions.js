@@ -229,7 +229,7 @@ module.exports = class Sessions {
         await session.client.then(client => {
             // Listen to messages
             client.onMessage((message) => {
-                console.log("- onMessage")
+                console.log("- onMessage", message.sender.shortName )
                 if (message.body === 'Oi' && message.isGroupMsg === false) {
                     client
                         .sendText(message.from, '🕷 Welcome Venom Bot 🕸 \n \n Olá! Tudo bem com você?')
