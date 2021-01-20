@@ -73,8 +73,9 @@ router.post("/QRCode", async (req, res, next) => {
             });
         } else if (session.state != 'CONNECTED' && session.status != 'inChat' || session.status != 'isLogged') {
             if (req.body.View == 'True' || req.body.View == 'true') {
-                session.qrcode = session.qrcode.replace('data:image/png;base64,', '');
-                const imageBuffer = Buffer.from(session.qrcode, 'base64');
+                var xSession = session.qrcode;
+                xSession = xSession.replace('data:image/png;base64,', '');
+                const imageBuffer = Buffer.from(xSession, 'base64');
                 res.writeHead(200, {
                     'Content-Type': 'image/png',
                     'Content-Length': imageBuffer.length
