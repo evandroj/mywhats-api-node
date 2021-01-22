@@ -880,7 +880,7 @@ module.exports = class Sessions {
     } //sendTextMult
     //
     static async sendTextGroup(sessionName, number, text) {
-        console.log("- Enviando menssagem de pexto para grupo!");
+        console.log("- Enviando menssagem de texto para grupo!");
         var session = Sessions.getSession(sessionName);
         if (session) {
             if (session.state == "CONNECTED") {
