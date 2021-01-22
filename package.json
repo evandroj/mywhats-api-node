@@ -1,5 +1,5 @@
 {
-  "name": "mywhats-api",
+  "name": "mywhats-api-node",
   "version": "1.0.0",
   "description": "Este projeto usa como base o Venom-bot, um navegador virtual sem interface gráfica que abre o whatsapp web e executa todos os comandos via código possibilitando assim a automação de todas as funções.",
   "main": "index.js",
