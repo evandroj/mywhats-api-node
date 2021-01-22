@@ -23,23 +23,23 @@ function soNumeros(string) {
 //
 module.exports = class Sessions {
 //
-    static async start(sessionName) {
-        //console.log("- Criando sessão "+ sessionName);
+    static async start(SessionName) {
+        //console.log("- Criando sessão "+ SessionName);
         Sessions.sessions = Sessions.sessions || []; //start array
 
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
 
         if (session == false) {
             //create new session
-            session = await Sessions.addSesssion(sessionName);
+            session = await Sessions.addSesssion(SessionName);
         } else if (["CLOSED"].includes(session.state)) {
             //restart session
             console.log("- State: CLOSED");
             session.state = "STARTING";
             session.status = "notLogged";
             session.attempts = 0;
-            session.client = Sessions.initSession(sessionName);
-            Sessions.setup(sessionName);
+            session.client = Sessions.initSession(SessionName);
+            Sessions.setup(SessionName);
         } else if (["CONFLICT", "UNPAIRED", "UNLAUNCHED", "UNPAIRED_IDLE"].includes(session.state)) {
             session.status = 'notLogged';
             console.log('- Status do sistema:', session.state);
@@ -48,7 +48,7 @@ module.exports = class Sessions {
             session.client.then(client => {
                 client.useHere();
             });
-            session.client = Sessions.initSession(sessionName);
+            session.client = Sessions.initSession(SessionName);
         } else {
             console.log('- Nome da sessão:', session.name);
             console.log('- State do sistema:', session.state);
@@ -60,10 +60,10 @@ module.exports = class Sessions {
     // ------------------------------------------------------------------------------------------------//
     //
     //
-    static async addSesssion(sessionName) {
+    static async addSesssion(SessionName) {
         console.log("- Adicionando sessão");
         var newSession = {
-            name: sessionName,
+            name: SessionName,
             qrcode: false,
             client: false,
             status: 'notLogged',
@@ -74,8 +74,8 @@ module.exports = class Sessions {
         console.log("- Nova sessão: " + newSession.state);
 
         //setup session
-        newSession.client = Sessions.initSession(sessionName);
-        Sessions.setup(sessionName);
+        newSession.client = Sessions.initSession(SessionName);
+        Sessions.setup(SessionName);
 
         return newSession;
     } //addSession
@@ -83,11 +83,11 @@ module.exports = class Sessions {
     // ------------------------------------------------------------------------------------------------//
     //
     //
-    static getSession(sessionName) {
+    static getSession(SessionName) {
         var foundSession = false;
         if (Sessions.sessions)
             Sessions.sessions.forEach(session => {
-                if (sessionName == session.name) {
+                if (SessionName == session.name) {
                     foundSession = session;
                 }
             });
@@ -108,9 +108,9 @@ module.exports = class Sessions {
     // ------------------------------------------------------------------------------------------------//
     //
     //
-    static async initSession(sessionName) {
+    static async initSession(SessionName) {
         console.log("- Iniciando sistema");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         const client = await venom.create(session.name, (base64Qrimg, asciiQR, attempts, urlCode) => {
             console.log('- Nome da sessão:', session.name);
             //
@@ -223,9 +223,9 @@ module.exports = class Sessions {
     // ------------------------------------------------------------------------------------------------//
     //
     //
-    static async setup(sessionName) {
+    static async setup(SessionName) {
         console.log("- Sinstema iniciado!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         await session.client.then(client => {
             // Listen to messages
             client.onMessage((message) => {
@@ -302,9 +302,9 @@ module.exports = class Sessions {
     //
     // ------------------------------------------------------------------------------------------------//
     //
-    static async Status(sessionName) {
+    static async Status(SessionName) {
         console.log("- Status");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) { //só adiciona se não existir
                 if (session.state == "STARTING") {
                     return {
@@ -352,9 +352,9 @@ module.exports = class Sessions {
         }
     } //status
     //
-    static async closeSession(sessionName) {
+    static async closeSession(SessionName) {
         console.log("- Fechando sessão");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) { //só adiciona se não existir
             if (session.state == "CONNECTED") {
                 if (session.client) {
@@ -415,9 +415,9 @@ module.exports = class Sessions {
     //
     // Device Functions
     // Delete the Service Worker
-    static async killServiceWorker(sessionName) {
+    static async killServiceWorker(SessionName) {
         console.log("- killServiceWorker");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) { //só adiciona se não existir
             if (session.state == "CONNECTED") {
                 if (session.client) {
@@ -461,9 +461,9 @@ module.exports = class Sessions {
     } //killServiceWorker
     //
     // Load the service again
-    static async restartService(sessionName) {
+    static async restartService(SessionName) {
         console.log("- restartService");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) { //só adiciona se não existir
             if (session.state == "CONNECTED") {
                 if (session.client) {
@@ -507,9 +507,9 @@ module.exports = class Sessions {
     } //restartService
     //
     // Get device info
-    static async getHostDevice(sessionName) {
+    static async getHostDevice(SessionName) {
         console.log("- getHostDevice");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) { //só adiciona se não existir
             if (session.state == "CONNECTED") {
                 if (session.client) {
@@ -553,9 +553,9 @@ module.exports = class Sessions {
     } //getHostDevice
     //
     // Get connection state
-    static async getConnectionState(sessionName) {
+    static async getConnectionState(SessionName) {
         console.log("- getConnectionState");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) { //só adiciona se não existir
             if (session.state == "CONNECTED") {
                 if (session.client) {
@@ -600,9 +600,9 @@ module.exports = class Sessions {
     } //getConnectionState
     //
     // Get battery level
-    static async getBatteryLevel(sessionName) {
+    static async getBatteryLevel(SessionName) {
         console.log("- getBatteryLevel");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) { //só adiciona se não existir
             if (session.state == "CONNECTED") {
                 if (session.client) {
@@ -646,9 +646,9 @@ module.exports = class Sessions {
     } //getBatteryLevel
     //
     // Is Connected
-    static async isConnected(sessionName) {
+    static async isConnected(SessionName) {
         console.log("- isConnected");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) { //só adiciona se não existir
             if (session.state == "CONNECTED") {
                 if (session.client) {
@@ -692,9 +692,9 @@ module.exports = class Sessions {
     } //isConnected
     //
     // Get whatsapp web version
-    static async getWAVersion(sessionName) {
+    static async getWAVersion(SessionName) {
         console.log("- getWAVersion");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) { //só adiciona se não existir
             if (session.state == "CONNECTED") {
                 if (session.client) {
@@ -742,9 +742,9 @@ module.exports = class Sessions {
     //
     // Funções básicas (uso)
     //
-    static async sendText(sessionName, number, text) {
+    static async sendText(SessionName, number, text) {
         console.log("- Enviando menssagem de texto! ");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultSendText = await session.client.then(async client => {
@@ -794,9 +794,9 @@ module.exports = class Sessions {
         }
     } //sendText
     //
-    static async sendTextMult(sessionName, base64Data, mimetype, originalname, msgtxtmass) {
+    static async sendTextMult(SessionName, base64Data, mimetype, originalname, msgtxtmass) {
         console.log("- Enviando menssagem texto lista de conatos!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 //
@@ -879,9 +879,9 @@ module.exports = class Sessions {
         }
     } //sendTextMult
     //
-    static async sendTextGroup(sessionName, number, text) {
+    static async sendTextGroup(SessionName, number, text) {
         console.log("- Enviando menssagem de texto para grupo!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultSendText = await session.client.then(async client => {
@@ -935,9 +935,9 @@ module.exports = class Sessions {
     // ------------------------------------------------------------------------------------------------//
     //
     //
-    static async sendImage(sessionName, number, base64Data, fileName, caption) {
+    static async sendImage(SessionName, number, base64Data, fileName, caption) {
         console.log("- Enviando imagem!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultsendImage = await session.client.then(async (client) => {
@@ -988,9 +988,9 @@ module.exports = class Sessions {
         }
     } //sendImage
     //
-    static async sendImageMult(sessionName, base64DataContato, originalnameContato, base64DataImagem, originalnameImagem, msgimgmass) {
+    static async sendImageMult(SessionName, base64DataContato, originalnameContato, base64DataImagem, originalnameImagem, msgimgmass) {
         console.log("- Enviando imagem lista de contatos!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultsendImage = await session.client.then(async (client) => {
@@ -1082,9 +1082,9 @@ module.exports = class Sessions {
         }
     } //sendImage
     //
-    static async sendImageGrup(sessionName, number, base64Data, fileName, caption) {
+    static async sendImageGrup(SessionName, number, base64Data, fileName, caption) {
         console.log("- Enviando imagem para grupo!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultsendImage = await session.client.then(async (client) => {
@@ -1138,9 +1138,9 @@ module.exports = class Sessions {
     // ------------------------------------------------------------------------------------------------//
     //
     //
-    static async sendFile(sessionName, number, base64Data, fileName, caption) {
+    static async sendFile(SessionName, number, base64Data, fileName, caption) {
         console.log("- Enviando documento!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultSendFile = await session.client.then(async (client) => {
@@ -1193,9 +1193,9 @@ module.exports = class Sessions {
     // "all" List all mutes
     // "toMute" List all silent chats
     // "noMute" List all chats without silence
-    static async getListMute(sessionName) {
+    static async getListMute(SessionName) {
         console.log("- Obtendo lista de bloqueados!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetListMute = await session.client.then(async client => {
@@ -1244,9 +1244,9 @@ module.exports = class Sessions {
     } //getSessionTokenBrowser
     //
     // Returns browser session token
-    static async getSessionTokenBrowser(sessionName) {
+    static async getSessionTokenBrowser(SessionName) {
         console.log("- Obtendo lista de bloqueados!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetSessionTokenBrowser = await session.client.then(async client => {
@@ -1299,9 +1299,9 @@ module.exports = class Sessions {
     // Retrieving Data
     //
     // Chama sua lista de contatos bloqueados (retorna uma matriz)
-    static async getBlockList(sessionName) {
+    static async getBlockList(SessionName) {
         console.log("- Obtendo lista de bloqueados!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetBlockList = await session.client.then(async client => {
@@ -1353,9 +1353,9 @@ module.exports = class Sessions {
     //
     //
     // Retrieve contacts
-    static async getAllContacts(sessionName) {
+    static async getAllContacts(SessionName) {
         console.log("- Obtendo todos os contatos!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetAllContacts = await session.client.then(async client => {
@@ -1404,9 +1404,9 @@ module.exports = class Sessions {
     //
     // Retrieve messages in chat
     //getAllMessagesInChat
-    static async getAllMessagesInChat(sessionName, numero) {
+    static async getAllMessagesInChat(SessionName, numero) {
         console.log("- AllMessagesInCha");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetAllMessagesInChat = await session.client.then(async client => {
@@ -1454,9 +1454,9 @@ module.exports = class Sessions {
     } // getAllMessagesInChat
     //
     // Retrieve more chat message
-    static async loadEarlierMessages(sessionName, numero) {
+    static async loadEarlierMessages(SessionName, numero) {
         console.log("- loadEarlierMessages");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultloadEarlierMessages = await session.client.then(async client => {
@@ -1505,9 +1505,9 @@ module.exports = class Sessions {
     } //loadEarlierMessages
     //
     // Retrieve all messages in chat
-    static async loadAndGetAllMessagesInChat(sessionName, numero) {
+    static async loadAndGetAllMessagesInChat(SessionName, numero) {
         console.log("- loadAndGetAllMessagesInChat!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultloadAndGetAllMessagesInChat = await session.client.then(async client => {
@@ -1558,9 +1558,9 @@ module.exports = class Sessions {
     // ------------------------------------------------------------------------------------------------//
     //
     // Retrieve contact status
-    static async getStatus(sessionName, numero) {
+    static async getStatus(SessionName, numero) {
         console.log("- Obtendo status!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetStatus = await session.client.then(async client => {
@@ -1613,9 +1613,9 @@ module.exports = class Sessions {
     //
     //
     // Recuperar perfil de usuário
-    static async getNumberProfile(sessionName, numero) {
+    static async getNumberProfile(SessionName, numero) {
         console.log("- Obtendo o perfil do número!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetNumberProfile = await session.client.then(async client => {
@@ -1668,9 +1668,9 @@ module.exports = class Sessions {
     //
     //
     // Recupera todas as mensagens não lidas
-    static async getAllUnreadMessages(sessionName) {
+    static async getAllUnreadMessages(SessionName) {
         console.log("- Obtendo todas as mensagens não lidas!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetAllUnreadMessages = await session.client.then(async client => {
@@ -1722,9 +1722,9 @@ module.exports = class Sessions {
     //
     //
     // Recuperar todos os chats
-    static async getAllChats(sessionName) {
+    static async getAllChats(SessionName) {
         console.log("- Obtendo todos os chats!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetAllChats = await session.client.then(async client => {
@@ -1776,9 +1776,9 @@ module.exports = class Sessions {
     //
     //
     // Recuperar todos os grupos
-    static async getAllGroups(sessionName) {
+    static async getAllGroups(SessionName) {
         console.log("- Obtendo todos os grupos!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetAllGroups = await session.client.then(async client => {
@@ -1830,9 +1830,9 @@ module.exports = class Sessions {
     //
     //
     // Recuperar fic de perfil (como url)
-    static async getProfilePicFromServer(sessionName, numero) {
+    static async getProfilePicFromServer(SessionName, numero) {
         console.log("- Obtendo a foto do perfil do servidor!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetProfilePicFromServer = await session.client.then(async client => {
@@ -1884,9 +1884,9 @@ module.exports = class Sessions {
     //
     //
     // Recuperar chat / conversa
-    static async getChat(sessionName, numero) {
+    static async getChat(SessionName, numero) {
         console.log("- Obtendo chats!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetChat = await session.client.then(async client => {
@@ -1938,9 +1938,9 @@ module.exports = class Sessions {
     //
     //
     // Verifique se o número existe
-    static async checkNumberStatus(sessionName, numero) {
+    static async checkNumberStatus(SessionName, numero) {
         console.log("- Verifique se o número existe!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultcheckNumberStatus = await session.client.then(async client => {
@@ -1989,9 +1989,9 @@ module.exports = class Sessions {
         }
     } //checkNumberStatus
     //
-    static async checkNumberStatusMult(sessionName, base64Data, mimetype, originalname) {
+    static async checkNumberStatusMult(SessionName, base64Data, mimetype, originalname) {
         console.log("- Enviando menssagem!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 //
@@ -2071,9 +2071,9 @@ module.exports = class Sessions {
     // Funções de Grupo
     //
     // Deixar o grupo
-    static async leaveGroup(sessionName, groupId) {
+    static async leaveGroup(SessionName, groupId) {
         console.log("- Obtendo chats!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultleaveGroup = await session.client.then(async client => {
@@ -2122,9 +2122,9 @@ module.exports = class Sessions {
     } //leaveGroup
     //
     // Obtenha membros do grupo
-    static async getGroupMembers(sessionName, groupId) {
+    static async getGroupMembers(SessionName, groupId) {
         console.log("- Obtendo chats!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetGroupMembers = await session.client.then(async client => {
@@ -2173,9 +2173,9 @@ module.exports = class Sessions {
     } //getGroupMembers
     //
     // Obter IDs de membros do grupo
-    static async getGroupMembersIds(sessionName, groupId) {
+    static async getGroupMembersIds(SessionName, groupId) {
         console.log("- Obtendo chats!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetGroupMembersIds = await session.client.then(async client => {
@@ -2224,9 +2224,9 @@ module.exports = class Sessions {
     } //getGroupMembersIds
     //
     // Gerar link de url de convite de grupo
-    static async getGroupInviteLink(sessionName, groupId) {
+    static async getGroupInviteLink(SessionName, groupId) {
         console.log("- Obtendo chats!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetGroupInviteLink = await session.client.then(async client => {
@@ -2275,9 +2275,9 @@ module.exports = class Sessions {
     } //getGroupInviteLink
     //
     // Criar grupo (título, participantes a adicionar)
-    static async createGroup(sessionName, GroupName, contactList) {
+    static async createGroup(SessionName, GroupName, contactList) {
         console.log("- Obtendo chats!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetGroupInviteLink = await session.client.then(async client => {
@@ -2329,9 +2329,9 @@ module.exports = class Sessions {
     } //createGroup
     //
     // Remove participant
-    static async removeParticipant(sessionName, groupoid, contato) {
+    static async removeParticipant(SessionName, groupoid, contato) {
         console.log("- removeParticipant");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultremoveParticipant = await session.client.then(async client => {
@@ -2381,9 +2381,9 @@ module.exports = class Sessions {
     //
 	//
     // Add participant
-    static async addParticipant(sessionName, groupoid, contato) {
+    static async addParticipant(SessionName, groupoid, contato) {
         console.log("- Obtendo chats!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultaddParticipant = await session.client.then(async client => {
@@ -2433,9 +2433,9 @@ module.exports = class Sessions {
     //
 	//
     // Promote participant (Give admin privileges)
-    static async promoteParticipant(sessionName, groupoid, contato) {
+    static async promoteParticipant(SessionName, groupoid, contato) {
         console.log("- Obtendo chats!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultpromoteParticipant = await session.client.then(async client => {
@@ -2485,9 +2485,9 @@ module.exports = class Sessions {
     //
 	//
     // Demote particiapnt (Revoke admin privileges)
-    static async demoteParticipant(sessionName, groupoid, contato) {
+    static async demoteParticipant(SessionName, groupoid, contato) {
         console.log("- Obtendo chats!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultdemoteParticipant = await session.client.then(async client => {
@@ -2537,9 +2537,9 @@ module.exports = class Sessions {
     //
 	//
     // Get group admins
-    static async getGroupAdmins(sessionName, groupoid, contato) {
+    static async getGroupAdmins(SessionName, groupoid, contato) {
         console.log("- Obtendo chats!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetGroupAdmins = await session.client.then(async client => {
@@ -2589,9 +2589,9 @@ module.exports = class Sessions {
     //
 	//
     // Return the group status, jid, description from it's invite link
-    static async getGroupInfoFromInviteLink(sessionName, groupoid, contato) {
+    static async getGroupInfoFromInviteLink(SessionName, groupoid, contato) {
         console.log("- Obtendo chats!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultgetGroupInfoFromInviteLink = await session.client.then(async client => {
@@ -2641,9 +2641,9 @@ module.exports = class Sessions {
     //
 	//
     // Join a group using the group invite code
-    static async joinGroup(sessionName, groupoid, contato) {
+    static async joinGroup(SessionName, groupoid, contato) {
         console.log("- Obtendo chats!");
-        var session = Sessions.getSession(sessionName);
+        var session = Sessions.getSession(SessionName);
         if (session) {
             if (session.state == "CONNECTED") {
                 var resultjoinGroup = await session.client.then(async client => {
