@@ -1,5 +1,5 @@
 {
-  "name": "mywhats-api-node",
+  "name": "mywhats-api-node-node",
   "version": "1.0.0",
   "description": "Este projeto usa como base o Venom-bot, um navegador virtual sem interface gráfica que abre o whatsapp web e executa todos os comandos via código possibilitando assim a automação de todas as funções.",
   "main": "index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AlanMartines/mywhats-api.git"
+    "url": "https://github.com/AlanMartines/mywhats-api-node.git"
   },
   "keywords": [
     "whatsapp",
@@ -26,9 +26,9 @@
   "author": "Alan Martines <alancpmartines@hotmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/AlanMartines/mywhats-api/issues"
+    "url": "https://github.com/AlanMartines/mywhats-api-node/issues"
   },
-  "homepage": "https://github.com/AlanMartines/mywhats-api#readme",
+  "homepage": "https://github.com/AlanMartines/mywhats-api-node#readme",
   "dependencies": {
     "atob": "^2.1.2",
     "axios": "^0.21.1",
