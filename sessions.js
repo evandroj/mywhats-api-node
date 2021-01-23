@@ -1313,7 +1313,7 @@ module.exports = class Sessions {
                         return erro;
                     });
                 });
-                return resultgetBlockList;
+                return { BlockList: resultgetBlockList };
                 //return { result: "success" };
             } else {
                 if (session.state == "STARTING") {
